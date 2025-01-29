@@ -123,4 +123,5 @@ int main() {
     }
   }
   free(startingDeck);
+  return 0;
 }
