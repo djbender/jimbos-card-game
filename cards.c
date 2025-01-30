@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const int DECK_SIZE = 52;
+
 enum Rank {
         ACE = 1,
         TWO,   // 2
@@ -103,7 +105,7 @@ void print_card(struct card c) {
 }
 
 void print_deck(struct card *deck) {
-        for(int c = 0; c < 52; c++) {
+        for(int c = 0; c < DECK_SIZE; c++) {
                 if(deck[c].rank == 0) {
                         break;
                 }
@@ -113,7 +115,7 @@ void print_deck(struct card *deck) {
 }
 
 int main() {
-        struct card *startingDeck = malloc(52 * sizeof(struct card));
+        struct card *startingDeck = malloc(DECK_SIZE * sizeof(struct card));
         int index = 0;
         for(int r = 1; r <= RANK_LENGTH; r++) {
                 for(int s = 1; s <= SUIT_LENGTH; s++) {
