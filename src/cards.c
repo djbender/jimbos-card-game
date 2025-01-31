@@ -130,26 +130,6 @@ void build_deck(struct card starting_deck[])
         }
 }
 
-// void shuffle(struct card ordered_deck[], struct card deck[])
-// {
-//         srand(time(NULL));
-//         // srand(0);
-//         int randoms[52];
-//         for(int i = 0; i < INITIAL_DECK_LENGTH; i++) {
-//                 const int MAX_ITER = 1000;
-//                 int iter = 0;
-//                 do {
-//                         randoms[i] = rand() % INITIAL_DECK_LENGTH;
-//                         // printf("%d", randoms[i]);
-//                         iter++;
-//                 } while (includes(randoms, i, i) && iter < MAX_ITER);
-//                 // printf("%d", randoms[i]);
-//         }
-//
-//         for(int j = 0; j < INITIAL_DECK_LENGTH; j++) {
-//                 deck[j] = ordered_deck[randoms[j]];
-//         }
-// }
 void shuffle(struct card deck[], int length)
 {
         srand(time(NULL));
