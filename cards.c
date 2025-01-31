@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "utils.h"
+
 const int RANK_LENGTH = 13;
 const int SUIT_LENGTH = 4;
 const int INITIAL_DECK_LENGTH = SUIT_LENGTH * RANK_LENGTH;
@@ -126,14 +128,6 @@ void build_deck(struct card starting_deck[])
                         }
                 }
         }
-}
-
-bool includes(int array[], int length, int value)
-{
-        for(int i = 0; i < length; i++) {
-                if(array[i] == value) return true;
-        }
-        return false;
 }
 
 void shuffle(struct card ordered_deck[], struct card deck[])

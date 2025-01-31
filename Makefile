@@ -8,7 +8,7 @@ CFLAGS = -Wall -Werror -Wextra -Wpedantic -g
 TARGET = cards.out
 
 # Source files
-SRCS = cards.c
+SRCS = cards.c utils.c
 
 # Object files (derived from source files)
 OBJS = $(SRCS:.c=.o)
