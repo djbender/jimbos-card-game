@@ -159,7 +159,7 @@ void shuffle(struct card deck[], int length)
                 int swap_index = rand() % length;
                 struct card temp = deck[i];
                 deck[i] = deck[swap_index];
-                deck[i] = temp;
+                deck[swap_index] = temp;
         }
 }
 
