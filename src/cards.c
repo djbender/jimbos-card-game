@@ -130,36 +130,47 @@ void build_deck(struct card starting_deck[])
         }
 }
 
-void shuffle(struct card ordered_deck[], struct card deck[])
+// void shuffle(struct card ordered_deck[], struct card deck[])
+// {
+//         srand(time(NULL));
+//         // srand(0);
+//         int randoms[52];
+//         for(int i = 0; i < INITIAL_DECK_LENGTH; i++) {
+//                 const int MAX_ITER = 1000;
+//                 int iter = 0;
+//                 do {
+//                         randoms[i] = rand() % INITIAL_DECK_LENGTH;
+//                         // printf("%d", randoms[i]);
+//                         iter++;
+//                 } while (includes(randoms, i, i) && iter < MAX_ITER);
+//                 // printf("%d", randoms[i]);
+//         }
+//
+//         for(int j = 0; j < INITIAL_DECK_LENGTH; j++) {
+//                 deck[j] = ordered_deck[randoms[j]];
+//         }
+// }
+void shuffle(struct card deck[], int length)
 {
         srand(time(NULL));
         // srand(0);
-        int randoms[52];
-        for(int i = 0; i < INITIAL_DECK_LENGTH; i++) {
-                const int MAX_ITER = 1000;
-                int iter = 0;
-                do {
-                        randoms[i] = rand() % INITIAL_DECK_LENGTH;
-                        // printf("%d", randoms[i]);
-                        iter++;
-                } while (includes(randoms, i, i) && iter < MAX_ITER);
-                // printf("%d", randoms[i]);
-        }
 
-        for(int j = 0; j < INITIAL_DECK_LENGTH; j++) {
-                deck[j] = ordered_deck[randoms[j]];
+        for(int i = 0; i < length; i++) {
+                int swap_index = rand() % length;
+                struct card temp = deck[i];
+                deck[i] = deck[swap_index];
+                deck[i] = temp;
         }
-        puts("Shuffled Deck!");
-        print_deck(deck);
 }
 
 int main(void) {
-        struct card *ordered_deck = malloc(INITIAL_DECK_LENGTH * sizeof(struct card));
-        (void)build_deck(ordered_deck);
-        puts("Build Deck!");
-        (void)print_deck(ordered_deck);
         struct card *deck = malloc(INITIAL_DECK_LENGTH * sizeof(struct card));
-        (void)shuffle(ordered_deck, deck);
-        free(ordered_deck);
+        (void)build_deck(deck);
+        puts("Build Deck!");
+        (void)print_deck(deck);
+        (void)shuffle(deck, INITIAL_DECK_LENGTH);
+        puts("Shuffled Deck!");
+        print_deck(deck);
+        free(deck);
         return 0;
 }

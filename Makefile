@@ -12,6 +12,7 @@ BIN_DIR := bin
 # Target executable
 TARGET = $(BIN_DIR)/cards
 
+SOURCES  := $(wildcard $(SRC_DIR)/*.c)
 # Object files (derived from source files)
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c) $(wildcard lib/**/*.c))
 
@@ -24,7 +25,10 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 # Rule to compile source files into object files
-$(OBJS):
+# $(OBJS): $(SRC_DIR)/$*
+.SECONDARYEXPANSION:
+$(OBJS): $($$@:$(BUILD_DIR)/%.o=$(SRC_DIR)/%.c)
+	@echo $(patsubst $(BUILD_DIR)/%.o, $(SRC_DIR)/%.c, $@)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ -c $(patsubst $(BUILD_DIR)/%, $(SRC_DIR)/%.c, $*)
 
