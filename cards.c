@@ -128,12 +128,10 @@ void build_deck(struct card starting_deck[])
         }
 }
 
-bool present_in(int array[], int i)
+bool includes(int array[], int length, int value)
 {
-        for(int j = 0; j < i; j++) {
-                // printf("%d == %d: %d\n", array[j], array[i], array[j] == array[i]);
-                if(array[j] == array[i])
-                        return true;
+        for(int i = 0; i < length; i++) {
+                if(array[i] == value) return true;
         }
         return false;
 }
@@ -150,7 +148,7 @@ void shuffle(struct card ordered_deck[], struct card deck[])
                         randoms[i] = rand() % INITIAL_DECK_LENGTH;
                         // printf("%d", randoms[i]);
                         iter++;
-                } while (present_in(randoms, i) && iter < MAX_ITER);
+                } while (includes(randoms, i, i) && iter < MAX_ITER);
                 // printf("%d", randoms[i]);
         }
 
