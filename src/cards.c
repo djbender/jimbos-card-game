@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-#include "utils.h"
+#include "../include/utils.h"
 
 const int RANK_LENGTH = 13;
 const int SUIT_LENGTH = 4;

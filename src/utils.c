@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "utils.h"
+#include "../include/utils.h"
 
 bool includes(int array[], int length, int value)
 {

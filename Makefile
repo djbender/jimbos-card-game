@@ -4,29 +4,33 @@ CC = clang
 # Compiler flags
 CFLAGS = -Wall -Werror -Wextra -Wpedantic -g
 
-# Target executable
-TARGET = cards.out
+# dirs
+SRC_DIR := src
+BUILD_DIR := build
+BIN_DIR := bin
 
-# Source files
-SRCS = cards.c utils.c
+# Target executable
+TARGET = $(BIN_DIR)/cards
 
 # Object files (derived from source files)
-OBJS = $(SRCS:.c=.o)
+OBJS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c) $(wildcard lib/**/*.c))
 
 # Default rule
 all: $(TARGET)
 
 # Rule to build the target executable
 $(TARGET): $(OBJS)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 # Rule to compile source files into object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJS):
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -o $@ -c $(patsubst $(BUILD_DIR)/%, $(SRC_DIR)/%.c, $*)
 
 # Clean rule to remove generated files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
 
 # Phony targets (not actual files)
-.PHONY: all clean
+.PHONY: all clean dir
