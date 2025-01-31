@@ -2,7 +2,7 @@
 CC = clang
 
 # Compiler flags
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -Wpedantic -g
 
 # Target executable
 TARGET = cards.out
