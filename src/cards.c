@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 #include "../include/utils.h"
 
 const int RANK_LENGTH = 13;
 const int SUIT_LENGTH = 4;
 const int INITIAL_DECK_LENGTH = SUIT_LENGTH * RANK_LENGTH;
+const int INITIAL_HAND_LENGTH = 8;
 
 enum Rank {
         ACE = 1,
@@ -85,54 +87,62 @@ struct card {
         enum Suit suit;
 };
 
-const char *rank_name(int r) {
-        return RANK_NAMES[r - 1];
+const char *rank_name(int r);
+const char *suit_name(int s);
+const char *short_rank_name(int r);
+const char *short_suit_name(int s);
+
+void deal_hand(struct card hand[], struct card deck[], int dealCardsLength, int *deckLength);
+void shuffle(struct card deck[], int length);
+void print_card(struct card c);
+void print_deck(struct card deck[], int deckLength);
+void build_deck(struct card starting_deck[], int deckLength);
+
+int main(void) {
+        int deckLength = INITIAL_DECK_LENGTH;
+        struct card *deck = malloc(deckLength * sizeof(struct card));
+        (void) build_deck(deck, deckLength);
+        // (void) puts("Build Deck!");
+        // (void) print_deck(deck, deckLength);
+        (void) shuffle(deck, deckLength);
+        // (void) puts("Shuffled Deck!");
+        // (void) print_deck(deck, deckLength);
+        int handLength = INITIAL_HAND_LENGTH;
+        struct card *hand = malloc(handLength* sizeof(struct card));
+        (void) deal_hand(hand, deck, handLength, &deckLength);
+        (void) puts("Dealt hand:");
+        (void) print_deck(hand, handLength);
+        (void) puts("Remaining Deck:");
+        (void) print_deck(deck, deckLength);
+        (void) printf("deckLength: %d\n", deckLength);
+        (void) free(deck);
+        return 0;
 }
 
-const char *suit_name(int s) {
-        return SuitNames[s];
-}
-
-const char *short_rank_name(int r) {
-        return SHORT_RANK_NAMES[r - 1];
-}
-
-const char *short_suit_name(int s) {
-        return SHORT_SUIT_NAMES[s];
-}
-
-void print_card(struct card c) {
-        printf("%s%s ", short_rank_name(c.rank), short_suit_name(c.suit));
-}
-
-void print_deck(struct card deck[]) {
-        for(int c = 0; c < INITIAL_DECK_LENGTH; c++) {
-                if(deck[c].rank == 0) {
-                        break;
-                }
-                print_card(deck[c]);
-        }
-        puts("");
-}
-
-void build_deck(struct card starting_deck[])
+void deal_hand(struct card hand[], struct card deck[], int dealCardsLength, int *deckLength)
 {
-        int index = 0;
-        for(int r = 1; r <= RANK_LENGTH; r++) {
-                for(int s = 1; s <= SUIT_LENGTH; s++) {
-                        struct card myCard = { r, (s - 1) };
-                        if(index < INITIAL_DECK_LENGTH) {
-                                starting_deck[index++] = myCard;
-                        } else {
-                                exit(1);
-                        }
-                }
-        }
+        (void) memcpy(hand, deck, dealCardsLength * sizeof(struct card));
+        // Remove One Element
+        // remove indexed item by resizing array and decrement logicalSize
+        // memmove(
+        //   array + removeIndex,
+        //   array + removeIndex + 1,
+        //   (--logicalSize - removeIndex) * sizeof(*array)
+        // );
+        //
+        *deckLength -= dealCardsLength;
+        // (void) printf("deckLength: %d\n", *deckLength);
+
+        (void) memmove(
+                deck,
+                deck + dealCardsLength,
+                (*deckLength - (dealCardsLength - 1)) * sizeof(*deck)
+        );
 }
 
 void shuffle(struct card deck[], int length)
 {
-        srand(time(NULL));
+        (void) srand(time(NULL));
         // srand(0);
 
         for(int i = 0; i < length; i++) {
@@ -143,14 +153,45 @@ void shuffle(struct card deck[], int length)
         }
 }
 
-int main(void) {
-        struct card *deck = malloc(INITIAL_DECK_LENGTH * sizeof(struct card));
-        (void)build_deck(deck);
-        puts("Build Deck!");
-        (void)print_deck(deck);
-        (void)shuffle(deck, INITIAL_DECK_LENGTH);
-        puts("Shuffled Deck!");
-        print_deck(deck);
-        free(deck);
-        return 0;
+void print_card(struct card c)
+{
+        (void) printf("%s%s ", short_rank_name(c.rank), short_suit_name(c.suit));
+}
+
+void build_deck(struct card starting_deck[], int deckLength)
+{
+        int index = 0;
+        for(int r = 1; r <= RANK_LENGTH; r++) {
+                for(int s = 1; s <= SUIT_LENGTH; s++) {
+                        struct card myCard = { r, (s - 1) };
+                        if(index < deckLength) {
+                                starting_deck[index++] = myCard;
+                        } else {
+                                (void) exit(1);
+                        }
+                }
+        }
+}
+
+void print_deck(struct card deck[], int deckLength) {
+        for(int c = 0; c < deckLength; c++) {
+                if(deck[c].rank == 0) {
+                        break;
+                }
+                (void) print_card(deck[c]);
+        }
+        (void) puts("");
+}
+
+const char *rank_name(int r) {
+        return RANK_NAMES[r - 1];
+}
+const char *suit_name(int s) {
+        return SuitNames[s];
+}
+const char *short_rank_name(int r) {
+        return SHORT_RANK_NAMES[r - 1];
+}
+const char *short_suit_name(int s) {
+        return SHORT_SUIT_NAMES[s];
 }
