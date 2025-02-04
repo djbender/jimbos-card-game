@@ -97,6 +97,7 @@ void shuffle(struct card deck[], int length);
 void print_card(struct card c);
 void print_deck(struct card deck[], int deckLength);
 void build_deck(struct card starting_deck[], int deckLength);
+void print_select_cards_prompt(struct card hand[], int handLength);
 
 int main(void) {
     int deckLength = INITIAL_DECK_LENGTH;
@@ -110,13 +111,53 @@ int main(void) {
     int handLength = INITIAL_HAND_LENGTH;
     struct card *hand = malloc(handLength* sizeof(struct card));
     (void) deal_hand(hand, deck, handLength, &deckLength);
+
     (void) puts("Dealt hand:");
     (void) print_deck(hand, handLength);
     (void) puts("Remaining Deck:");
     (void) print_deck(deck, deckLength);
     (void) printf("deckLength: %d\n", deckLength);
+
+    (void) print_select_cards_prompt(hand, handLength);
+
+    (void) puts("Input card numbs seperated by spaces.");
+    (void) printf("Play cards: ");
+
+    char selectedCards[100];
+    (void) s_gets(selectedCards, 100);
+    // (void) printf("%s\n", selectedCards);
+
+    int INPUT_HAND_LENGTH = 5;
+    int inputHand[INPUT_HAND_LENGTH];
+
+    (void) ints_from_string(selectedCards, inputHand, INPUT_HAND_LENGTH);
+    printf("%d\n", inputHand[0]);
+    printf("%d\n", inputHand[1]);
+    printf("%d\n", inputHand[2]);
+    printf("%d\n", inputHand[3]);
+    printf("%d\n", inputHand[4]);
+    // for(i = 0; i > INPUT_HAND_LENGTH; i++) {
+    //
+    // }
+
+
     (void) free(deck);
     return 0;
+}
+
+void print_select_cards_prompt(struct card hand[], int handLength)
+{
+    print_deck(hand, handLength);
+
+    for(int i = 0; i < handLength; i++) {
+        printf(" ^  ");
+    }
+    printf("\n");
+
+    for(int i = 0; i < handLength; i++) {
+        printf("%2d  ", i + 1);
+    }
+    printf("\n");
 }
 
 void deal_hand(struct card hand[], struct card deck[], int dealCardsLength, int *deckLength)
@@ -134,16 +175,16 @@ void deal_hand(struct card hand[], struct card deck[], int dealCardsLength, int 
     // (void) printf("deckLength: %d\n", *deckLength);
 
     (void) memmove(
-            deck,
-            deck + dealCardsLength,
-            (*deckLength - (dealCardsLength - 1)) * sizeof(*deck)
-            );
+        deck,
+        deck + dealCardsLength,
+        (*deckLength - (dealCardsLength - 1)) * sizeof(*deck)
+    );
 }
 
 void shuffle(struct card deck[], int length)
 {
     (void) srand(time(NULL));
-    // srand(0);
+    // (void) srand(0);
 
     for(int i = 0; i < length; i++) {
         int swap_index = rand() % length;
@@ -155,7 +196,7 @@ void shuffle(struct card deck[], int length)
 
 void print_card(struct card c)
 {
-    (void) printf("%s%s ", short_rank_name(c.rank), short_suit_name(c.suit));
+    (void) printf("%2s%s ", short_rank_name(c.rank), short_suit_name(c.suit));
 }
 
 void build_deck(struct card starting_deck[], int deckLength)
