@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v4.2.2
         with:
           persist-credentials: false
+      - run: sudo apt-get install libcriterion-dev
       - run: make
       - run: make test
       - run: make test-run
