@@ -28,7 +28,7 @@ DBG_CFLAGS = -g -O0 -DDEBUG
 
 # test
 TEST_DIR := test
-TEST_EXE := $(TEST_DIR)/test
+TEST_EXE := $(BIN_DIR)/test
 
 # Default rule
 all: debug $(TARGET)
@@ -54,26 +54,25 @@ $(DBG_DIR)/%.o: $(SRC_DIR)%.c
 
 test: $(TEST_EXE)
 
-test-program := test/test
 test-sources := $(wildcard test/*_test.c)
-test-objects := $(test-sources:.c=.o)
+test-objects := $(patsubst $(TEST_DIR)/%, $(BUILD_DIR)/%, $(test-sources:.c=.o))
 test-target-sources := $(filter-out src/cards.c, $(wildcard $(SRC_DIR)/*.c))
-test-target-objects := $(test-target-sources:.c=.o)
+test-target-objects := $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(test-target-sources:.c=.o))
 
-$(test-program): $(test-objects) $(test-target-objects)
+$(TEST_EXE): $(test-objects) $(test-target-objects)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(TEST_CFLAGS) -o $(TEST_EXE) $^
 
-$(TEST_DIR)/%.o: $(TEST_DIR)/%.c
-	@echo "test_dir/*.o"
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.c
+	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) $(TEST_CFLAGS) -o $@ $<
 
 test-run: test
-	@./$(test-program) --verbose
+	@./$(TEST_EXE) --verbose
 
 # Clean rule to remove generated files
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR) $(DBG_DIR) test/test
+	rm -rf $(BUILD_DIR) $(BIN_DIR) $(DBG_DIR)
 
 # Phony targets (not actual files)
 .PHONY: all clean dir test test-run
