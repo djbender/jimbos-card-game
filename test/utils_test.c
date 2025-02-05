@@ -38,3 +38,42 @@ Test(includes, accepts_empty_array) {
     bool rval = includes(arr, length, value);
     cr_assert(rval == false);
 }
+
+Test(includes, accepts_empty_array_with_mismatched_length) {
+    int value = 42;
+    int *arr = NULL;
+    int length = 1;
+
+    bool rval = includes(arr, length, value);
+    cr_assert(rval == false);
+}
+
+Test(ints_from_string, a_single_int) {
+    int capacity = 1;
+    char input[] = "1";
+    int rval[capacity];
+
+    ints_from_string(input, rval, capacity);
+    cr_assert(rval[0] == 1);
+}
+
+Test(ints_from_string, two_ints) {
+    int capacity = 2;
+    char input[] = "1 2";
+    int rval[capacity];
+
+    ints_from_string(input, rval, capacity);
+    cr_assert(rval[0] == 1);
+    cr_assert(rval[1] == 2);
+}
+
+Test(ints_from_string, multi_digit_ints) {
+    int capacity = 3;
+    char input[] = "1 20 300";
+    int rval[capacity];
+
+    ints_from_string(input, rval, capacity);
+    cr_assert(rval[0] == 1);
+    cr_assert(rval[1] == 20);
+    cr_assert(rval[2] == 300);
+}

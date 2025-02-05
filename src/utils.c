@@ -7,8 +7,10 @@
 
 bool includes(int array[], int length, int value)
 {
-    for(int i = 0; i < length; i++) {
-        if(array[i] == value) return true;
+    if(array != NULL) {
+        for(int i = 0; i < length; i++) {
+            if(array[i] == value) return true;
+        }
     }
     return false;
 }
