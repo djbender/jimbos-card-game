@@ -1,0 +1,22 @@
+---
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - "dependabot/**"
+  pull_request_target:
+    types: [labeled]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - run: make
+      - run: make test
+      - run: make test-run
